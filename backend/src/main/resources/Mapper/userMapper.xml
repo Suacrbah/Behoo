@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.edu.demo.mapper.UserMapper">
+
+    <resultMap id="BaseResultMap" type="cn.edu.demo.domain.User">
+        <result column="id" jdbcType="INTEGER" property="id" />
+        <result column="userName" jdbcType="VARCHAR" property="userName" />
+        <result column="passWord" jdbcType="VARCHAR" property="passWord" />
+        <result column="realName" jdbcType="VARCHAR" property="realName" />
+    </resultMap>
+
+    <select id="Sel1" resultType="cn.edu.demo.domain.User">
+        select * from user where id = #{id}
+    </select>
+    <select id="selByUsernameAndPassword" resultType="cn.edu.demo.domain.User">
+        select * from user where username=#{username} and hashed_password=#{hashed_password}
+    </select>
+
+    <insert id="insertUser">
+        insert into user(username, hashed_password)
+        values(#{username}, #{hashed_password})
+    </insert>
+
+</mapper>
