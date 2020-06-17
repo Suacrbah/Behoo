@@ -1,6 +1,6 @@
 <template>
   <div id="app" class="small-container">
-    <h1>Employees</h1>
+    <h1>Welcome</h1>
     <employee-form />
   </div>
 </template>
