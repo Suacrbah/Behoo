@@ -14,7 +14,6 @@
 
 <script>
   import api from "./backend-api";
-  // import axios from 'axios';
 
   export default {
     name: 'Login-Form',
@@ -33,23 +32,14 @@
         api.auth(this.user.username, this.user.password)
         .then(response => {
           this.response = response.data['statu'];
-          console.log('Created new User with Id ' + response.data);
+          if (this.response == 0) {
+            this.$router.push('/Editor', () => {});
+          }
         })
         .catch(e => {
           this.errors.push(e)
         });
       },
-      
-      // handleHello() {
-      //   api.hello()
-      //   .then(response => {
-      //     console.log('1');
-      //     this.response = response.data;
-      //   })
-      //   .catch(e => {
-      //     this.errors.push(e)
-      //   });
-      // }
     }
   }
 </script>
