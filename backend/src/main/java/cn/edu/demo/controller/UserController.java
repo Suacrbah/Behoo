@@ -24,14 +24,15 @@ public class UserController {
 //    }
 
     @RequestMapping(value="/api/login/{username}/{hashed_password}",method= RequestMethod.POST)
-    public int login(@PathVariable String username,
+    public String login(@PathVariable String username,
                      @PathVariable  String hashed_password){
         int validateResult = userService.validateByPassword(username, hashed_password);
 
         System.out.println("hello");
         System.out.println(validateResult);
+        String json="{\"statu\":\"fuck\"}";
 
-        return validateResult;
+        return json;
     }
 
     @RequestMapping(value="/register",method= RequestMethod.POST)
