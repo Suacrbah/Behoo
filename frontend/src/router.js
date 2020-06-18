@@ -10,6 +10,7 @@ const router = new Router({
     routes: [
         { path: '/editor', component: Editor },
         { path: '/login', component: LoginForm },
+        { path: '/', component: LoginForm },
     ]
 })
 
