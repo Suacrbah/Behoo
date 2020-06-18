@@ -1,6 +1,6 @@
 <template>
   <div id="login-form">
-    <form>
+    <form @submit.prevent="handleLogin()">
       <label>Username</label>
       <input v-model="user.username" type="text" />
       <label>Password</label>
@@ -8,11 +8,13 @@
       <button @click="handleLogin()">Login</button>
       <button @click="handleHello()">Hello</button>
     </form>
+    <p>Response: {{ response }}</p>
   </div>
 </template>
 
 <script>
   import api from "./backend-api";
+  // import axios from 'axios';
 
   export default {
     name: 'Login-Form',
@@ -24,13 +26,13 @@
           username: '',
           password: '',
         },
-      }
+      };
     },
     methods: {
       handleLogin() {
         api.auth(this.user.username, this.user.password)
         .then(response => {
-          this.response = response.data;
+          this.response = response.data['statu'];
           console.log('Created new User with Id ' + response.data);
         })
         .catch(e => {
@@ -38,16 +40,16 @@
         });
       },
       
-      handleHello() {
-        api.hello()
-        .then(response => {
-          console.log('1');
-          this.response = response.data;
-        })
-        .catch(e => {
-          this.errors.push(e)
-        });
-      }
+      // handleHello() {
+      //   api.hello()
+      //   .then(response => {
+      //     console.log('1');
+      //     this.response = response.data;
+      //   })
+      //   .catch(e => {
+      //     this.errors.push(e)
+      //   });
+      // }
     }
   }
 </script>
