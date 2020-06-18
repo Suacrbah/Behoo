@@ -1,23 +1,23 @@
 <template>
   <div id="app" class="small-container">
     <h1>Welcome</h1>
-    <employee-form />
+    <Login-form />
   </div>
 </template>
 
 <script>
-import EmployeeForm from './components/EmployeeForm.vue'
+import LoginForm from './components/LoginForm.vue'
 
 export default {
   name: 'App',
   components: {
-    EmployeeForm,
+    LoginForm,
   },
   data() {
     return {
-      employee: {
-        name: '',
-        email: '',
+      user: {
+        username: '',
+        password: '',
       },
     }
   },
