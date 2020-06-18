@@ -10,8 +10,10 @@
   "dependencies": {
     "@tinymce/tinymce-vue": "^3.2.2",
     "axios": "^0.19.2",
+    "bootstrap-vue": "^2.15.0",
     "core-js": "^3.6.5",
-    "vue": "^2.6.11"
+    "vue": "^2.6.11",
+    "vue-router": "^3.3.4"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.4.0",

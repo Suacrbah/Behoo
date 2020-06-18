@@ -1,26 +1,15 @@
 <template>
   <div id="app" class="small-container">
-    <Login-form />
-    <Editor />
+    <router-view></router-view>
   </div>
 </template>
 
 <script>
-import LoginForm from './components/LoginForm.vue'
-import Editor from './components/Editor.vue'
-
 export default {
   name: 'App',
-  components: {
-    LoginForm,
-    Editor,
-  },
   data() {
     return {
-      user: {
-        username: '',
-        password: '',
-      },
+      msg: '',
     }
   },
 }
