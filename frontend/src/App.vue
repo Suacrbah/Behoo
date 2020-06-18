@@ -1,17 +1,19 @@
 <template>
   <div id="app" class="small-container">
-    <h1>Welcome</h1>
     <Login-form />
+    <Editor />
   </div>
 </template>
 
 <script>
 import LoginForm from './components/LoginForm.vue'
+import Editor from './components/Editor.vue'
 
 export default {
   name: 'App',
   components: {
     LoginForm,
+    Editor,
   },
   data() {
     return {
