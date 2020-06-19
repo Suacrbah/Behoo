@@ -15,7 +15,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
   button {
     background: #009435;
     border: 1px solid #009435;

@@ -1,15 +1,26 @@
 <template>
-  <div id="login-form">
-    <form @submit.prevent="handleLogin()">
-      <label>Username</label>
-      <input v-model="user.username" type="text" />
-      <label>Password</label>
-      <input v-model="user.password" type="password" />
-      <button @click="handleLogin()">Login</button>
-      <button @click="handleHello()">Hello</button>
-    </form>
-    <p>Response: {{ response }}</p>
-  </div>
+    <div class="vue-tempalte">
+        <form @submit.prevent="handleLogin()">
+            <h3>Log In</h3>
+
+            <div class="form-group">
+                <label>Username</label>
+                <input type="text" class="form-control form-control-lg"/>
+            </div>
+
+            <div class="form-group">
+                <label>Password</label>
+                <input type="password" class="form-control form-control-lg" />
+            </div>
+
+            <button type="submit" class="btn btn-dark btn-lg btn-block" @click="handleLogin()">Log In</button>
+
+            <p class="forgot-password text-right">
+                Not a member? 
+                <router-link :to="{name: 'login'}">sign up</router-link>
+            </p>
+        </form>
+    </div>
 </template>
 
 <script>
@@ -43,9 +54,3 @@
     }
   }
 </script>
-
-<style scoped>
-  form {
-    margin-bottom: 2rem;
-  }
-</style>
