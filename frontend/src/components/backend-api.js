@@ -2,7 +2,7 @@ import axios from 'axios'
 
 // axios is a promise-based HTTP client
 const AXIOS = axios.create({
-  baseURL: 'http://192.168.43.233:8888/api',
+  baseURL: 'http://localhost:8888/api',
   timeout: 1000
 });
 
