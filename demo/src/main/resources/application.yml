@@ -2,8 +2,8 @@ spring:
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
     url: jdbc:mysql://localhost:3306/behoo?useUnicode=true&useSSL=false&characterEncoding=utf8&serverTimezone=Asia/Shanghai
-    username: root
-    password: 991002
+    username: test
+    password: 123456
 mybatis-plus:
   mapper-locations: classpath*:/mapper/**Mapper.xml
 server:
@@ -21,4 +21,19 @@ demo:
     # token 过期时间
     expire: 604800
     header: Authorization
+
+mail:
+  host: smtp.qq.com
+  port: 465
+  debug: false
+  username: 2775153204@qq.com
+  password: kbarsotujpvjddfg
+  default-encoding: utf-8
+  properties:
+    mail:
+      smtp:
+        auth: true
+        starttls:
+          enable: true
+          required: true
 

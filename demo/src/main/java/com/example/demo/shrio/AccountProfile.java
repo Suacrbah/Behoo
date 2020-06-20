@@ -9,13 +9,13 @@ import java.io.Serializable;
 @Data
 public class AccountProfile implements Serializable {
 
-    private Long id;
+    public Integer id;
 
-    private String username;
+    public String username;
 
-    private String introduction;
+    public String introduction;
 
-    private String email;
+    public String email;
 
 }
 
