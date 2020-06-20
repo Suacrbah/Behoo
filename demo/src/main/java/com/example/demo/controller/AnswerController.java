@@ -8,12 +8,14 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.demo.common.lang.Result;
 import com.example.demo.entity.Answer;
 import com.example.demo.service.AnswerService;
+import com.example.demo.service.GraphService;
 import com.example.demo.util.ShiroUtil;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.Assert;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 
@@ -29,8 +31,11 @@ import java.time.LocalDateTime;
 @RequestMapping("/answer")
 public class AnswerController {
 
-        @Autowired
-        AnswerService answerService;
+    @Autowired
+    AnswerService answerService;
+
+    @Autowired
+    GraphService graphService;
 
         @GetMapping("/")
         public Result answers(Integer currentPage) {
@@ -65,6 +70,26 @@ public class AnswerController {
             BeanUtil.copyProperties(answer, temp, "id", "userId", "create_time");
             answerService.saveOrUpdate(temp);
             return Result.succ(200,"operation success",null);
+        }
+
+        @RequiresAuthentication
+        @PostMapping("/image/upload")
+        public Result imageUpload(@RequestParam("file") MultipartFile file){
+            String filename = file.getOriginalFilename();
+            String username=ShiroUtil.getProfile().getUsername();
+            filename=username+"_"+filename;
+
+            String uploadDir = "D:/nginx-1.18.0/html/images";
+            System.out.println(filename);
+            System.out.println(uploadDir);
+
+            String result=graphService.executeUpload(filename,uploadDir,file);
+            System.out.println(result);
+
+            return Result.succ(200,
+                    "http://localhost:89/images/"+filename,
+                    null);
+
         }
 
 
