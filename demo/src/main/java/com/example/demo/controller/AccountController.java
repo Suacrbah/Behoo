@@ -37,14 +37,14 @@ public class AccountController {
         User user = userService.getOne(new QueryWrapper<User>().eq("username", loginDto.getUsername()));
         Assert.notNull(user, "用户不存在，请更换");
 
-        String turepwd=user.getHashedPassword();
+        String truepwd=user.getHashedPassword();
         String inputpwd=loginDto.getHashedPassword();
 
 //        if(!turepwd.equals(SecureUtil.md5(inputpwd))){
 //            return Result.fail("密码不正确");
 //        }
 
-        if(!turepwd.equals(inputpwd)){
+        if(!truepwd.equals(inputpwd)){
             return Result.fail("密码不正确");
         }else{
             System.out.println("密码正确");
@@ -59,6 +59,7 @@ public class AccountController {
                 .put("username", user.getUsername())
                 .put("avatar-url", user.getAvatarUrl())
                 .put("email", user.getEmail())
+                .put("introduction",user.getIntroduction())
                 .map());
     }
     @PostMapping("/registry")
@@ -83,6 +84,7 @@ public class AccountController {
        String [] rec=new String[1];
        rec[0]=email;
         int randomCode=1000+(int)(Math.random()*(9999-1000+1));
+        System.out.println("【】发送邮件："+email);
         try {
             mailService.sendMail("behoo",
                     "[behoo验证码]"+String.valueOf(randomCode),"2775153204@qq.com",rec);

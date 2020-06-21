@@ -80,11 +80,10 @@ public class AnswerController {
             filename=username+"_"+filename;
 
             String uploadDir = "D:/nginx-1.18.0/html/images";
-            System.out.println(filename);
-            System.out.println(uploadDir);
+            System.out.println("[image upload]user upload "+filename);
+            System.out.println();
 
             String result=graphService.executeUpload(filename,uploadDir,file);
-            System.out.println(result);
 
             return Result.succ(200,
                     "http://localhost:89/images/"+filename,
