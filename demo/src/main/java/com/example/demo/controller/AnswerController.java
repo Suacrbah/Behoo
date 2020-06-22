@@ -46,6 +46,18 @@ public class AnswerController {
             return Result.succ(pageData);
         }
 
+        @RequiresAuthentication
+        @GetMapping("/my_answer")
+        public Result getMyanswer(Integer currentPage) {
+            System.out.println("[answer] personal answer request");
+            Integer id=ShiroUtil.getProfile().getId();
+            if(currentPage == null || currentPage < 1) currentPage = 1;
+            Page page = new Page(currentPage, 10);
+            IPage pageData = answerService.page(page, new QueryWrapper<Answer>().eq("user_id",id).orderByDesc("create_time"));
+
+            return Result.succ(pageData);
+        }
+
         @GetMapping("/{id}")
         public Result detail(@PathVariable(name = "id") Long id) {
             Answer answer = answerService.getById(id);
@@ -88,7 +100,6 @@ public class AnswerController {
             return Result.succ(200,
                     "http://localhost:89/images/"+filename,
                     null);
-
         }
 
 

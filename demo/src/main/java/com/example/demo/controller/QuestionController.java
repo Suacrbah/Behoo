@@ -7,6 +7,8 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.demo.common.lang.Result;
 import com.example.demo.entity.Question;
 import com.example.demo.service.QuestionService;
+import com.example.demo.util.ShiroUtil;
+import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
@@ -28,21 +30,33 @@ public class QuestionController {
     QuestionService questionService;
 
     @GetMapping("/")
-    public Result answers(Integer currentPage) {
+    public Result questions(Integer currentPage) {
 
         if(currentPage == null || currentPage < 1) currentPage = 1;
         Page page = new Page(currentPage, 5);
         IPage pageData = questionService.page(page, new QueryWrapper<Question>().orderByDesc("view_count"));
 
-        pageData.getRecords();
         return Result.succ(pageData);
     }
 
     @GetMapping("/{id}")
-    public Result answerDetail(@PathVariable(name = "id") Long id) {
+    public Result questionDetail(@PathVariable(name = "id") Long id) {
         Question answer = questionService.getById(id);
         Assert.notNull(answer, "该问题已删除！");
         return Result.succ(answer);
+    }
+
+    @RequiresAuthentication
+    @GetMapping("/my_question")
+    public Result getMyquestion(Integer currentPage) {
+        System.out.println("[questionl] personal question request");
+        Integer id=ShiroUtil.getProfile().getId();
+
+        if(currentPage == null || currentPage < 1) currentPage = 1;
+        Page page = new Page(currentPage, 5);
+        IPage pageData = questionService.page(page, new QueryWrapper<Question>().eq("user_id",id).orderByDesc("view_count"));
+
+        return Result.succ(pageData);
     }
 
 }

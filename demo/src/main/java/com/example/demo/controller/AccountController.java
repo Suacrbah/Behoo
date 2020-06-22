@@ -35,7 +35,11 @@ public class AccountController {
     public Result login(@Validated @RequestBody LoginDto loginDto, HttpServletResponse response) {
         System.out.println("=====================login aciton");
         User user = userService.getOne(new QueryWrapper<User>().eq("username", loginDto.getUsername()));
-        Assert.notNull(user, "用户不存在，请更换");
+        //本来应该是assert返回，但是刘博就是不干
+        //Assert.notNull(user, "用户不存在，请更换");
+        if(user==null){
+            return Result.fail("用户不存在");
+        }
 
         String truepwd=user.getHashedPassword();
         String inputpwd=loginDto.getHashedPassword();
