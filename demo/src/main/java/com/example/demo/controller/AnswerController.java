@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * <p>
@@ -37,26 +39,36 @@ public class AnswerController {
     @Autowired
     GraphService graphService;
 
-        @GetMapping("/")
-        public Result answers(Integer currentPage) {
-
+        @GetMapping("/question/{questionId}")
+        public Result answers(@PathVariable(name = "questionId") Long questionId,Integer currentPage) {
             if(currentPage == null || currentPage < 1) currentPage = 1;
             Page page = new Page(currentPage, 5);
-            IPage pageData = answerService.page(page, new QueryWrapper<Answer>().orderByDesc("create_time"));
+            IPage pageData = answerService.page(page,
+                    new QueryWrapper<Answer>().
+                            eq("question_id",questionId).
+                            orderByDesc("create_time")
+            );
             return Result.succ(pageData);
         }
 
         @RequiresAuthentication
-        @GetMapping("/my_answer")
-        public Result getMyanswer(Integer currentPage) {
+        @GetMapping("/my_answer/")
+        public Result getMyquestion(Integer currentPage) {
             System.out.println("[answer] personal answer request");
-            Integer id=ShiroUtil.getProfile().getId();
-            if(currentPage == null || currentPage < 1) currentPage = 1;
-            Page page = new Page(currentPage, 10);
-            IPage pageData = answerService.page(page, new QueryWrapper<Answer>().eq("user_id",id).orderByDesc("create_time"));
+            Integer id=ShiroUtil.getAccountID();
+            if(currentPage == null || currentPage < 1) {
+                currentPage = 1;
+            }
+
+            Page page = new Page(currentPage, 5);
+            IPage pageData = answerService.page(page, new QueryWrapper<Answer>()
+                    .eq("user_id",id)
+                    .orderByDesc("create_time")
+            );
 
             return Result.succ(pageData);
         }
+
 
         @GetMapping("/{id}")
         public Result detail(@PathVariable(name = "id") Long id) {
@@ -66,41 +78,47 @@ public class AnswerController {
         }
 
         @RequiresAuthentication
-        @PostMapping("/edit")
-        public Result edit(@Validated @RequestBody Answer answer) {
+        @PostMapping("/add/{questionId}")
+        public Result edit(@PathVariable(name = "questionId") Integer questionId,
+                           @RequestParam("content") String content) {
+            System.out.println("[answer] answer add!");
+            Answer answer=new Answer();
+            answer.setQuestionId(questionId);
+            answer.setUserId(ShiroUtil.getAccountID());
+            answer.setContent(content);
+            answer.setCreateTime(LocalDateTime.now());
             System.out.println(answer.toString());
-            Answer temp = null;
-            if(answer.getId() != null) {
-                temp = answerService.getById(answer.getId());
-                Assert.isTrue(temp.getUserId().equals(ShiroUtil.getProfile().getId()), "没有权限编辑");
-            } else {
-                temp = new Answer();
-                temp.setUserId(ShiroUtil.getProfile().getId());
-                temp.setCreateTime(LocalDateTime.now());
-                temp.setQuestionId(0);
-            }
-            BeanUtil.copyProperties(answer, temp, "id", "userId", "create_time");
-            answerService.saveOrUpdate(temp);
-            return Result.succ(200,"operation success",null);
+
+            answerService.saveOrUpdate(answer);
+            return Result.succ(200,"添加回答成功",answer);
         }
 
         @RequiresAuthentication
         @PostMapping("/image/upload")
-        public Result imageUpload(@RequestParam("file") MultipartFile file){
-            String filename = file.getOriginalFilename();
-            String username=ShiroUtil.getProfile().getUsername();
-            filename=username+"_"+filename;
+        public Result imageUpload(MultipartFile[] files){
+            System.out.println("[images]images upload");
+            Map<Integer,String> urlRet=new HashMap<>();
+            if(files.length>0){
+                for(int i=0;i<files.length;i++){
+                    MultipartFile file=files[i];
+                    String filename = file.getOriginalFilename();
+                    String username=ShiroUtil.getProfile().getUsername();
+                    filename=username+"_"+filename;
 
-            String uploadDir = "D:/nginx-1.18.0/html/images";
-            System.out.println("[image upload]user upload "+filename);
-            System.out.println();
+                    String uploadDir = "D:/nginx-1.18.0/html/images";
+                    System.out.println("[image upload]user upload "+filename);
+                    System.out.println();
 
-            String result=graphService.executeUpload(filename,uploadDir,file);
+                    String result=graphService.executeUpload(filename,uploadDir,file);
+                    urlRet.put(i,"http://192.168.137.93:89/images/"+filename);
+                }
+            }
 
             return Result.succ(200,
-                    "http://localhost:89/images/"+filename,
-                    null);
+                    "图片 upload 成功",
+                    urlRet);
         }
+
 
 
 

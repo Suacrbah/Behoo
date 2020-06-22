@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.demo.common.lang.Result;
 import com.example.demo.entity.Question;
 import com.example.demo.service.QuestionService;
+import com.example.demo.shrio.AccountProfile;
 import com.example.demo.util.ShiroUtil;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,11 +30,11 @@ public class QuestionController {
     @Autowired
     QuestionService questionService;
 
-    @GetMapping("/")
+    @GetMapping("")
     public Result questions(Integer currentPage) {
 
         if(currentPage == null || currentPage < 1) currentPage = 1;
-        Page page = new Page(currentPage, 5);
+        Page page = new Page(currentPage, 10);
         IPage pageData = questionService.page(page, new QueryWrapper<Question>().orderByDesc("view_count"));
 
         return Result.succ(pageData);
@@ -47,10 +48,11 @@ public class QuestionController {
     }
 
     @RequiresAuthentication
-    @GetMapping("/my_question")
+    @GetMapping("/my_question/")
     public Result getMyquestion(Integer currentPage) {
         System.out.println("[questionl] personal question request");
-        Integer id=ShiroUtil.getProfile().getId();
+
+        Integer id=ShiroUtil.getAccountID();
 
         if(currentPage == null || currentPage < 1) currentPage = 1;
         Page page = new Page(currentPage, 5);
