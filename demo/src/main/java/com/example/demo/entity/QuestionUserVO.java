@@ -8,7 +8,12 @@ import lombok.experimental.Accessors;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-public class CollectionVO  extends Collection{
-    private String content;
+public class QuestionUserVO  extends Question{
+
+    private String username;
+
+    private String introduction;
+
+    private String avatarUrl;
 
 }
