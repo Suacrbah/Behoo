@@ -79,7 +79,7 @@ public class QuestionController {
     @RequiresAuthentication
     @PostMapping("/search")
     public Result questionSearch(Integer currentPage,@RequestParam("key_word") String keyWord) {
-
+        System.out.println("[question] search: keyword");
         if(currentPage == null || currentPage < 1) currentPage = 1;
         Page page = new Page(currentPage, 10);
         IPage pageData = questionService.page(page, new QueryWrapper<Question>().like("title",keyWord).orderByDesc("view_count"));

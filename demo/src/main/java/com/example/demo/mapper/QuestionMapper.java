@@ -17,7 +17,8 @@ import java.util.List;
  * @since 2020-06-18
  */
 public interface QuestionMapper extends BaseMapper<Question> {
-    @Select("SELECT question.*,user.`username`,user.`introduction`,user.`avatar_url` FROM question,user WHERE question.id=#{question_id} and question.id=user.id")
+
+    @Select("SELECT question.*,user.`username`,user.`introduction`,user.`avatar_url` FROM question,user WHERE question.id=#{question_id} and question.user_id=user.id")
     QuestionUserVO getQuestionUser(int question_id) ;
 
 }
