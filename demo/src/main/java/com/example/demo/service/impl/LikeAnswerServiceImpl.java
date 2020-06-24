@@ -1,5 +1,6 @@
 package com.example.demo.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.example.demo.entity.LikeAnswer;
 import com.example.demo.mapper.LikeAnswerMapper;
 import com.example.demo.service.LikeAnswerService;
@@ -16,5 +17,11 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class LikeAnswerServiceImpl extends ServiceImpl<LikeAnswerMapper, LikeAnswer> implements LikeAnswerService {
+    @Override
+    public int delecteLikeAnswer(Integer answer_id,Integer user_id){
+        return  this.baseMapper.delete(new QueryWrapper<LikeAnswer>()
+                .eq("user_id",user_id )
+                .eq("answer_id",answer_id));
+    }
 
 }

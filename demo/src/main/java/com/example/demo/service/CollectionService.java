@@ -16,4 +16,6 @@ import com.example.demo.entity.CollectionVO;
 public interface CollectionService extends IService<Collection> {
 
     public Page<CollectionVO> getCollectionVO(Page<CollectionVO> page,int userId);
+
+    public int delecteCollection(Integer answer_id,Integer user_id);
 }

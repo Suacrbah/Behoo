@@ -11,4 +11,6 @@ import lombok.experimental.Accessors;
 public class CommentUserVO extends Comment{
     private String username;
     private String avatarUrl;
+
+
 }

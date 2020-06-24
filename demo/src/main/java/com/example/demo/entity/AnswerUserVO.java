@@ -14,4 +14,5 @@ public class AnswerUserVO extends Answer{
     private String introduction;
 
     private String avatarUrl;
+
 }

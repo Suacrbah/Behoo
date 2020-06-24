@@ -110,7 +110,7 @@ public class AnswerController {
                     System.out.println();
 
                     String result=graphService.executeUpload(filename,uploadDir,file);
-                    urlRet.put(i,"http://192.168.43.233:89/images/"+filename);
+                    urlRet.put(i,"http://192.168.43.145:89/images/"+filename);
                 }
             }
 

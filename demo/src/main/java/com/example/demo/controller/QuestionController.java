@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.demo.common.lang.Result;
 import com.example.demo.entity.Answer;
+import com.example.demo.entity.AnswerUserVO;
 import com.example.demo.entity.Question;
 import com.example.demo.entity.QuestionUserVO;
 import com.example.demo.service.AnswerService;
@@ -17,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -55,6 +57,7 @@ public class QuestionController {
 
     @GetMapping("/{id}/answers")
     public Result questionAnswerDetail(@PathVariable(name = "id") Integer id,Integer currentPage) {
+        if(currentPage==null) currentPage=1;
 //        Question question = questionService.getById(id);
         Page page = new Page(currentPage, 10);
         IPage pageData = answerService.getAnswerUser(page,id);
@@ -85,6 +88,22 @@ public class QuestionController {
         IPage pageData = questionService.page(page, new QueryWrapper<Question>().like("title",keyWord).orderByDesc("view_count"));
 
         return Result.succ(pageData);
+    }
+
+    @RequiresAuthentication
+    @PostMapping("/add")
+    public Result edit(@RequestParam("title") String title,@RequestParam("content") String content) {
+        System.out.println("[question] question add!");
+
+        Question question=new Question();
+        question.setUserId(ShiroUtil.getAccountID());
+        question.setTitle(title);
+        question.setContent(content);
+        question.setCreateTime(LocalDateTime.now());
+        System.out.println(question.toString());
+
+        questionService.saveOrUpdate(question);
+        return Result.succ(200,"添加问题成功",question);
     }
 
 }

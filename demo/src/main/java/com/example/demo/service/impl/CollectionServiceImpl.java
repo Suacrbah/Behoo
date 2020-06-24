@@ -1,5 +1,6 @@
 package com.example.demo.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.demo.entity.Collection;
 import com.example.demo.entity.CollectionVO;
@@ -22,5 +23,12 @@ public class CollectionServiceImpl extends ServiceImpl<CollectionMapper, Collect
     @Override
     public Page<CollectionVO> getCollectionVO(Page<CollectionVO> page,int userId) {
         return page.setRecords(this.baseMapper.getCollectionAnswer(page,userId));
+    }
+
+    @Override
+    public int delecteCollection(Integer answer_id,Integer user_id){
+        return  this.baseMapper.delete(new QueryWrapper<Collection>()
+                .eq("user_id",user_id )
+                .eq("answer_id",answer_id));
     }
 }

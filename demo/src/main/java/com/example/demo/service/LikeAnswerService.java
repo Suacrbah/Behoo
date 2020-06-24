@@ -13,4 +13,6 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface LikeAnswerService extends IService<LikeAnswer> {
 
+    public int delecteLikeAnswer(Integer answer_id,Integer user_id);
+
 }
