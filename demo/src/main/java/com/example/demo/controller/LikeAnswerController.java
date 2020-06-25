@@ -46,7 +46,7 @@ public class LikeAnswerController {
 
             Answer answer=answerService.getById(answerId);
             BigDecimal likeCount=answer.getCollectCount();
-            likeCount.add(BigDecimal.valueOf(1));
+            likeCount=likeCount.add(BigDecimal.valueOf(1));
             answer.setLikeCount(likeCount);
             answerService.saveOrUpdate(answer);
 

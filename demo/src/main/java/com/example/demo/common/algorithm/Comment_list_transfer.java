@@ -2,6 +2,7 @@ package com.example.demo.common.algorithm;
 
 import com.example.demo.entity.Comment;
 import com.example.demo.entity.CommentUserVO;
+import javafx.util.Pair;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -15,7 +16,7 @@ public class Comment_list_transfer {
         this.commentUserVOs = _commentUserVOS;
     }
 
-    public Map<Integer,List<Integer>>  get_new(){
+    public Map<Integer,List<CommentUserVO> >  get_new(){
         int length = commentUserVOs.size();
 
         List<Integer> list = new ArrayList<>(length);
@@ -24,11 +25,11 @@ public class Comment_list_transfer {
             list.add(tmp);
         }
         Union_Join_Set ujs = new Union_Join_Set(length, list);
-        Map<Integer, List<Integer> > mp = new HashMap<>();
+        Map<Integer, List<CommentUserVO > > mp = new HashMap<>();
 
         for(int i = 0; i < length; i++){
             if(commentUserVOs.get(i).getReplyToId()==null){
-                List<Integer> tmp_list = new ArrayList<>();
+                List<CommentUserVO> tmp_list = new ArrayList<>();
                 mp.put(commentUserVOs.get(i).getId(), tmp_list);
                 continue;
             }
@@ -45,7 +46,7 @@ public class Comment_list_transfer {
             int ancester_id = ujs.find(ujs.get_new_id(comment_id));
             ancester_id = ujs.get_old_id(ancester_id);
             if(mp.containsKey(ancester_id)){
-                mp.get(ancester_id).add(comment_id);
+                mp.get(ancester_id).add(commentUserVOs.get(i));
             }
         }
         return mp;

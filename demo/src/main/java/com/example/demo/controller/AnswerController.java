@@ -17,9 +17,11 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 /**
  * <p>
@@ -78,16 +80,39 @@ public class AnswerController {
         }
 
         @RequiresAuthentication
+        @GetMapping("/checkExist/{questionId}")
+        public Result checkAnswerExist(@PathVariable(name = "questionId") Integer questionId){
+            System.out.println("[answer]check exist!");
+            Answer answer=answerService.getOne(new QueryWrapper<Answer>()
+                    .eq("user_id",ShiroUtil.getAccountID())
+                    .eq("question_id",questionId));
+            if(answer==null){
+                return Result.succ(200,"answer not exist",null);
+            }else{
+                return Result.succ(200,"answer exist",answer);
+            }
+        }
+
+        @RequiresAuthentication
         @PostMapping("/add/{questionId}")
         public Result edit(@PathVariable(name = "questionId") Integer questionId,
                            @RequestParam("content") String content) {
             System.out.println("[answer] answer add!");
-            Answer answer=new Answer();
-            answer.setQuestionId(questionId);
-            answer.setUserId(ShiroUtil.getAccountID());
+            Answer answer=answerService.getOne(new QueryWrapper<Answer>()
+                    .eq("user_id",ShiroUtil.getAccountID())
+                    .eq("question_id",questionId));
+            if(answer==null){
+                answer=new Answer();
+                answer.setQuestionId(questionId);
+                answer.setUserId(ShiroUtil.getAccountID());
+                answer.setCreateTime(LocalDateTime.now());
+                answer.setCreateTime(LocalDateTime.now());
+
+                answer.setCollectCount(BigDecimal.valueOf(0));
+                answer.setLikeCount(BigDecimal.valueOf(0));
+            }
             answer.setContent(content);
-            answer.setCreateTime(LocalDateTime.now());
-            System.out.println(answer.toString());
+            answer.setLastUpdateTime(LocalDateTime.now());
 
             answerService.saveOrUpdate(answer);
             return Result.succ(200,"添加回答成功",answer);
@@ -102,6 +127,8 @@ public class AnswerController {
                 for(int i=0;i<files.length;i++){
                     MultipartFile file=files[i];
                     String filename = file.getOriginalFilename();
+                    String uuid = UUID.randomUUID().toString().replaceAll("-","");
+                    filename=uuid.substring(0,3)+filename;
                     String username=ShiroUtil.getProfile().getUsername();
                     filename=username+"_"+filename;
 
@@ -110,9 +137,10 @@ public class AnswerController {
                     System.out.println();
 
                     String result=graphService.executeUpload(filename,uploadDir,file);
-                    urlRet.put(i,"http://192.168.43.145:89/images/"+filename);
+                    urlRet.put(i+1,"http://120.25.212.67:8205/images/"+filename);
                 }
             }
+            System.out.println(urlRet.toString());
 
             return Result.succ(200,
                     "图片 upload 成功",

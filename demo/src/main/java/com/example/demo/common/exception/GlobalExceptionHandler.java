@@ -3,6 +3,7 @@ package com.example.demo.common.exception;
 import com.example.demo.common.lang.Result;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.ShiroException;
+import org.apache.shiro.authc.ExpiredCredentialsException;
 import org.apache.shiro.authz.UnauthenticatedException;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindingResult;
@@ -44,6 +45,13 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(value = RuntimeException.class)
     public Result handler(RuntimeException e) {
         log.error("运行时异常：----------------{}", e);
+        return Result.fail(e.getMessage());
+    }
+
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    @ExceptionHandler(value= ExpiredCredentialsException.class)
+    public Result handler(ExpiredCredentialsException e){
+        log.error("授权异常：----------------{}", e);
         return Result.fail(e.getMessage());
     }
 

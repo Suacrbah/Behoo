@@ -33,7 +33,7 @@ public class CommentController {
     public Result detail(@PathVariable(name = "id") Integer id) {
         List<CommentUserVO> commentUserVOs = commentService.getCommentUserVO(id);
         Comment_list_transfer clt = new Comment_list_transfer(commentUserVOs);
-        Map<Integer,List<Integer>> ret = clt.get_new();
+        Map<Integer,List<CommentUserVO>> ret = clt.get_new();
         return Result.succ(ret);
     }
 
@@ -43,11 +43,15 @@ public class CommentController {
                               @RequestParam("reply_to_id") Integer reply_to_id,
                               @RequestParam("content") String content){
         Comment comment=new Comment();
+        if(reply_to_id.equals(-1)) reply_to_id=null;
 
         comment.setAnswerId(answerId);
         comment.setReplyToId(reply_to_id);
         comment.setUserId(ShiroUtil.getAccountID());
         comment.setContent(content);
+        commentService.save(comment);
+
+        System.out.println("[comment]comment add");
 
         return Result.succ(200,"添加评论成功",null);
 
