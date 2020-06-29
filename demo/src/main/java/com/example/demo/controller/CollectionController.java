@@ -52,7 +52,7 @@ public class CollectionController {
 
     @RequiresAuthentication
     @GetMapping("/{answerId}")
-    public Result addLikeAnswer(@PathVariable(name = "answerId") Integer answerId) {
+    public Result collectAnswer(@PathVariable(name = "answerId") Integer answerId) {
 
         Collection collection=collectionService.getOne(new QueryWrapper<Collection>()
                 .eq("user_id",ShiroUtil.getAccountID())

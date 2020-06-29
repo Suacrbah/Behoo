@@ -41,26 +41,26 @@ public class AnswerController {
     @Autowired
     GraphService graphService;
 
-        @GetMapping("/question/{questionId}")
-        public Result answers(@PathVariable(name = "questionId") Long questionId,Integer currentPage) {
-            if(currentPage == null || currentPage < 1) currentPage = 1;
-            Page page = new Page(currentPage, 5);
-            IPage pageData = answerService.page(page,
-                    new QueryWrapper<Answer>().
-                            eq("question_id",questionId).
-                            orderByDesc("create_time")
-            );
-            return Result.succ(pageData);
-        }
+    @GetMapping("/question/{questionId}")
+    public Result answers(@PathVariable(name = "questionId") Long questionId,Integer currentPage) {
+        if(currentPage == null || currentPage < 1) currentPage = 1;
+        Page page = new Page(currentPage, 5);
+        IPage pageData = answerService.page(page,
+                new QueryWrapper<Answer>().
+                        eq("question_id",questionId).
+                        orderByDesc("create_time")
+        );
+        return Result.succ(pageData);
+    }
 
         @RequiresAuthentication
         @GetMapping("/my_answer/")
         public Result getMyquestion(Integer currentPage) {
             System.out.println("[answer] personal answer request");
-            Integer id=ShiroUtil.getAccountID();
             if(currentPage == null || currentPage < 1) {
                 currentPage = 1;
             }
+            Integer id=ShiroUtil.getAccountID();
 
             Page page = new Page(currentPage, 5);
             IPage pageData = answerService.page(page, new QueryWrapper<Answer>()

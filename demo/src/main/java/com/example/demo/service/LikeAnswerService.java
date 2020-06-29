@@ -15,4 +15,6 @@ public interface LikeAnswerService extends IService<LikeAnswer> {
 
     public int delecteLikeAnswer(Integer answer_id,Integer user_id);
 
+    public int addLikeAnswer(Integer answer_id,Integer user_id);
+
 }

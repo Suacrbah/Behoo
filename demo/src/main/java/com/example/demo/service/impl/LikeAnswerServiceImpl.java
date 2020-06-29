@@ -5,6 +5,7 @@ import com.example.demo.entity.LikeAnswer;
 import com.example.demo.mapper.LikeAnswerMapper;
 import com.example.demo.service.LikeAnswerService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.example.demo.util.ShiroUtil;
 import org.springframework.stereotype.Service;
 
 /**
@@ -22,6 +23,14 @@ public class LikeAnswerServiceImpl extends ServiceImpl<LikeAnswerMapper, LikeAns
         return  this.baseMapper.delete(new QueryWrapper<LikeAnswer>()
                 .eq("user_id",user_id )
                 .eq("answer_id",answer_id));
+    }
+    @Override
+    public int addLikeAnswer(Integer answer_id,Integer user_id){
+        LikeAnswer likeAnswer=new LikeAnswer();
+        likeAnswer.setAnswerId(answer_id);
+        likeAnswer.setUserId(user_id);
+        this.save(likeAnswer);
+        return 1;
     }
 
 }

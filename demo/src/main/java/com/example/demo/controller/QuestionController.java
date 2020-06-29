@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -41,7 +42,7 @@ public class QuestionController {
 
     @GetMapping("")
     public Result questions(Integer currentPage) {
-
+        System.out.println("[question] questions");
         if(currentPage == null || currentPage < 1) currentPage = 1;
         Page page = new Page(currentPage, 10);
         IPage pageData = questionService.page(page, new QueryWrapper<Question>().orderByDesc("view_count"));
@@ -51,12 +52,19 @@ public class QuestionController {
 
     @GetMapping("/{id}")
     public Result questionDetail(@PathVariable(name = "id") Integer id) {
+        System.out.println("[question] question detail");
         QuestionUserVO questionUserVO= questionService.getQuestionUserVO(id);
+        Question question=questionService.getById(id);
+        BigDecimal before=question.getViewCount();
+        BigDecimal after=before.add(BigDecimal.valueOf(1));
+        question.setViewCount(after);
+        questionService.saveOrUpdate(question);
         return Result.succ(questionUserVO);
     }
 
     @GetMapping("/{id}/answers")
     public Result questionAnswerDetail(@PathVariable(name = "id") Integer id,Integer currentPage) {
+        System.out.println("[question] question detail answer");
         if(currentPage==null) currentPage=1;
 //        Question question = questionService.getById(id);
         Page page = new Page(currentPage, 10);
@@ -100,6 +108,7 @@ public class QuestionController {
         question.setTitle(title);
         question.setContent(content);
         question.setCreateTime(LocalDateTime.now());
+        question.setViewCount(BigDecimal.valueOf(0));
         System.out.println(question.toString());
 
         questionService.saveOrUpdate(question);

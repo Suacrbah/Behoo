@@ -13,4 +13,8 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface UserService extends IService<User> {
 
+    public int addAnswerLike(Integer user_id);
+
+    public int cacelAnswerLike(Integer user_id);
+
 }

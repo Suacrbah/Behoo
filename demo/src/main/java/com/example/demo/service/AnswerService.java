@@ -16,4 +16,8 @@ import com.example.demo.entity.AnswerUserVO;
 public interface AnswerService extends IService<Answer> {
     public Page<AnswerUserVO> getAnswerUser(Page<AnswerUserVO> page, int question_id);
 
+    public int addAnswerLike(Integer answer_id);
+
+    public int cacelAnswerLike(Integer answer_id);
+
 }

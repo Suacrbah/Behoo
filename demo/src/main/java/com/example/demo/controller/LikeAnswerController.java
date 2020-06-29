@@ -7,6 +7,7 @@ import com.example.demo.entity.Answer;
 import com.example.demo.entity.LikeAnswer;
 import com.example.demo.service.AnswerService;
 import com.example.demo.service.LikeAnswerService;
+import com.example.demo.service.UserService;
 import com.example.demo.util.ShiroUtil;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +31,9 @@ public class LikeAnswerController {
     @Autowired
     AnswerService answerService;
 
+    @Autowired
+    UserService userService;
+
     @RequiresAuthentication
     @GetMapping("/{answerId}")
     public Result addLikeAnswer(@PathVariable(name = "answerId") Integer answerId) {
@@ -39,32 +43,19 @@ public class LikeAnswerController {
                 .eq("answer_id",answerId));
 
         if(likeAnswer == null){
-            likeAnswer=new LikeAnswer();
-            likeAnswer.setAnswerId(answerId);
-            likeAnswer.setUserId(ShiroUtil.getAccountID());
-            likeAnswerService.save(likeAnswer);
-
-            Answer answer=answerService.getById(answerId);
-            BigDecimal likeCount=answer.getCollectCount();
-            likeCount=likeCount.add(BigDecimal.valueOf(1));
-            answer.setLikeCount(likeCount);
-            answerService.saveOrUpdate(answer);
+            likeAnswerService.addLikeAnswer(answerId,ShiroUtil.getAccountID());
+            Integer user_id=answerService.addAnswerLike(answerId);
+            userService.addAnswerLike(user_id);
 
             System.out.println("[like answer] answer like!");
-
             return Result.succ(200,"点赞成功",likeAnswer);
         }else{
             likeAnswerService.delecteLikeAnswer(answerId,ShiroUtil.getAccountID());
-            Answer answer=answerService.getById(answerId);
-            BigDecimal likeCount=answer.getCollectCount();
-            BigDecimal subnum=new BigDecimal(1);
-            likeCount=likeCount.subtract(subnum);
-            answer.setLikeCount(likeCount);
-            answerService.saveOrUpdate(answer);
+            Integer user_id=answerService.cacelAnswerLike(answerId);
+            userService.cacelAnswerLike(user_id);
+
             System.out.println("[like answer] answer like cancel!");
-
             return Result.fail(400,"取消点赞",likeAnswer);
-
         }
     }
 
