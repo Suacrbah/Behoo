@@ -9,7 +9,7 @@
   },
   "dependencies": {
     "@tinymce/tinymce-vue": "^3.2.2",
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "bootstrap-vue": "^2.15.0",
     "core-js": "^3.6.5",
     "mdbvue": "^6.7.1",
